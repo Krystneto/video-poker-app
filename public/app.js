@@ -1,5 +1,13 @@
 'use strict'
 
+// dependencies
+// const _ = require('lodash');
+
+// element selectors
+const hand_container = document.body.querySelector('.hand_container');
+const dealBtn = document.body.querySelector('.deal');
+
+
 // Building deck array
 const cardNames = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
 const cardSuits = ['Hearts', 'Spades', 'Clubs', 'Diamonds'];
@@ -23,14 +31,14 @@ const createDeck =
 const deck = _.flatten(createDeck(cardSuits)(cardNames));
 
 // function to shuffle the deck
-const shuffledDeck = _.shuffle(deck);
+let shuffledDeck = _.shuffle(deck);
 
 // function to deal the first five cards from the deck
-const dealFiveCards = shuffleDeck => shuffledDeck.slice(0,5);
-const remainingDeck = shuffleDeck => shuffledDeck.slice(5);
+const dealFiveCards = shuffleDeck => shuffleDeck.slice(0,5);
+const remainingDeck = shuffleDeck => shuffleDeck.slice(5);
 
-const dealtHand = dealFiveCards(shuffledDeck);
-const deckRemainder = remainingDeck(shuffledDeck);
+let dealtHand = dealFiveCards(shuffledDeck);
+let deckRemainder = remainingDeck(shuffledDeck);
 
 // test functions for winning hands
 function countInArray(array, value) {
@@ -158,16 +166,45 @@ const isWinningHand = (hand) => {
 
 
 // test stub objects for checking winning hands
-const pairHand = _.times(2, _.constant({ value: 3, suit: 'Spades' })).concat({ value: 1, suit: 'Clubs'}, { value: 2, suit: 'Clubs'}, { value: 4, suit: 'Hearts'})
-const threeOfKindHand = _.times(3, _.constant({ value: 3, suit: 'Hearts' })).concat({ value: 2, suit: 'Diamonds'}, { value: 6, suit: 'Clubs' })
-const twoPairHand = _.times(2, _.constant({ value: 3, suit: 'Hearts' })).concat({ value: 1, suit: 'Spades'}, { value: 1, suit: 'Clubs'}, { value: 4, suit: 'Diamonds'})
-const straightHand = [{ value: 1, suit: 'Clubs'}, { value: 2, suit: 'Hearts' }, { value: 3, suit: 'Spades' }, { value: 4, suit: 'Hearts' }, { value: 5, suit: 'Clubs' }]
-const flushHand = _.times(5, _.constant({ suit: 'Hearts' }))
-const fullHouseHand = _.times(3, _.constant({ value: 3, suit: 'Hearts' })).concat({ value: 2, suit: 'Diamonds'}, { value: 2, suit: 'Clubs' })
-const fourOfKindHand = _.times(4, _.constant({ value: 3 })).concat({ value: 1 })
-const straightFlushHand = [{ value: 1, suit: 'Clubs'}, { value: 2, suit: 'Clubs' }, { value: 3, suit: 'Clubs' }, { value: 4, suit: 'Clubs' }, { value: 5, suit: 'Clubs' }]
-const royalFlushHand = [{ value: 10, suit: 'Clubs'}, { value: 11, suit: 'Clubs' }, { value: 12, suit: 'Clubs' }, { value: 13, suit: 'Clubs' }, { value: 14, suit: 'Clubs' }]
+// const pairHand = _.times(2, _.constant({ value: 3, suit: 'Spades' })).concat({ value: 1, suit: 'Clubs'}, { value: 2, suit: 'Clubs'}, { value: 4, suit: 'Hearts'})
+// const threeOfKindHand = _.times(3, _.constant({ value: 3, suit: 'Hearts' })).concat({ value: 2, suit: 'Diamonds'}, { value: 6, suit: 'Clubs' })
+// const twoPairHand = _.times(2, _.constant({ value: 3, suit: 'Hearts' })).concat({ value: 1, suit: 'Spades'}, { value: 1, suit: 'Clubs'}, { value: 4, suit: 'Diamonds'})
+// const straightHand = [{ value: 1, suit: 'Clubs'}, { value: 2, suit: 'Hearts' }, { value: 3, suit: 'Spades' }, { value: 4, suit: 'Hearts' }, { value: 5, suit: 'Clubs' }]
+// const flushHand = _.times(5, _.constant({ suit: 'Hearts' }))
+// const fullHouseHand = _.times(3, _.constant({ value: 3, suit: 'Hearts' })).concat({ value: 2, suit: 'Diamonds'}, { value: 2, suit: 'Clubs' })
+// const fourOfKindHand = _.times(4, _.constant({ value: 3 })).concat({ value: 1 })
+// const straightFlushHand = [{ value: 1, suit: 'Clubs'}, { value: 2, suit: 'Clubs' }, { value: 3, suit: 'Clubs' }, { value: 4, suit: 'Clubs' }, { value: 5, suit: 'Clubs' }]
+// const royalFlushHand = [{ value: 10, suit: 'Clubs'}, { value: 11, suit: 'Clubs' }, { value: 12, suit: 'Clubs' }, { value: 13, suit: 'Clubs' }, { value: 14, suit: 'Clubs' }]
 
 
-console.log('hand', dealtHand)
-console.log(isWinningHand(dealtHand))
+// console.log('hand', dealtHand)
+
+// console.log(isWinningHand(dealtHand))
+
+const dealHandToBrowser = hand => {
+    hand.forEach(card => {
+        let dealtCard = document.createElement('div')
+        dealtCard.classList.add('hand_container--card')
+        dealtCard.style.backgroundImage = `url(${card.image_url})`
+        dealtCard.style.backgroundSize =  '100% 100%';
+        return hand_container.appendChild(dealtCard);
+    })
+}
+
+dealHandToBrowser(dealtHand);
+
+const clearHand = () => {
+    while (hand_container.firstChild) {
+        hand_container.removeChild(hand_container.firstChild)
+    } 
+}
+const dealNewHand = () => {
+    clearHand();
+    let newShuffledDeck = _.shuffle(deck);
+    let newDealtHand = dealFiveCards(newShuffledDeck);
+    return dealHandToBrowser(newDealtHand);
+}
+
+
+// Event Listeners
+dealBtn.addEventListener('click', dealNewHand)

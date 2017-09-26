@@ -1,3 +1,26 @@
 body {
-    background: pink;
+    background: lightblue;
+}
+
+.hand_container {
+    background-color: green;
+    height: 300px;
+    width: 800px;
+    border: 2px solid red;
+}
+
+.hand_container--card {
+    margin-top: 25px;
+    margin-left: 5px;
+    height: 200px;
+    width: 150px;
+    border: 1px solid black;
+    float: left;
+    background-color: white;
+}
+
+.hand_container--card:hover {
+    box-sizing: border-box;
+    border: 2px solid pink;
+    cursor: pointer;
 }
