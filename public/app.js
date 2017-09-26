@@ -1,7 +1,7 @@
-const _ = require('lodash');
+'use strict'
 
 // Building deck array
-const cardNames = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King', 'Ace'];
+const cardNames = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
 const cardSuits = ['Hearts', 'Spades', 'Clubs', 'Diamonds'];
 
 // function to create a 52 playing card deck   
@@ -10,7 +10,14 @@ const createDeck =
         cardSuits => 
             cardNames.map(x => 
                 cardSuits.map( (y, j) => 
-                    Object.assign({}, { value: j+1, suit: x, name: y })));
+                    Object.assign({}, { 
+                        value: j+1, 
+                        suit: x, 
+                        name: y, 
+                        image_url: `/assets/playing_cards/${y.toLowerCase()}_of_${x.toLowerCase()}.png` 
+                    })
+                )
+            );
 
 // A new 52 card deck
 const deck = _.flatten(createDeck(cardSuits)(cardNames));
@@ -24,8 +31,6 @@ const remainingDeck = shuffleDeck => shuffledDeck.slice(5);
 
 const dealtHand = dealFiveCards(shuffledDeck);
 const deckRemainder = remainingDeck(shuffledDeck);
-
-
 
 // test functions for winning hands
 function countInArray(array, value) {
@@ -46,9 +51,7 @@ const isTwoPair = hand => {
     return false;
 }
 
-const isThreeOfKind = 
-    hand => 
-        countInArray => {
+const isThreeOfKind = hand => {
             let sortArr = _.map(hand, 'value')
                 .map((x,i,arr) => countInArray(arr, x));
             
@@ -76,9 +79,7 @@ const isFlush = hand => {
 }
 
 
-const isFullHouse = 
-    hand => 
-        isThreeOfKind => {
+const isFullHouse = hand => {
             if (isThreeOfKind(hand) && (_.uniqBy(hand, 'value').length === 2)) {
                 return true;
             }
@@ -86,9 +87,7 @@ const isFullHouse =
         };
 
 
-const isFourOfKind = 
-    hand => 
-        countInArray => {
+const isFourOfKind = hand => {
             const sortArr = _.map(hand, 'value')
                 .map((x,i,arr) => countInArray(arr, x));
         
@@ -98,10 +97,7 @@ const isFourOfKind =
             return false;
         }
 
-const isStraightFlush =
-    hand => 
-        isStraight =>
-            isFlush => {
+const isStraightFlush = hand => {
                 if (isStraight(hand) && isFlush(hand)) {
                     return true;
                 }
@@ -110,8 +106,6 @@ const isStraightFlush =
 
 
 const isRoyalFlush = hand =>  {
-            console.log(hand);
-            console.log(isFlush);
             let cardValueTotal = _.sortBy(_.map(hand, 'value')).reduce((a, b) => a + b );
             if (isFlush(hand) && cardValueTotal === 60) {
                 return true;
@@ -119,22 +113,22 @@ const isRoyalFlush = hand =>  {
             return false;
         };
 
+
 // function to check if the hand is a winner
 const isWinningHand = (hand) => {
-    
-    if (isRoyalFlush(hand, isFlush)) {
+    if (isRoyalFlush(hand)) {
         return 'You have a Royal Flush';
     }
 
-    if (isStraightFlush(hand, isStraight, isFlush)) {
+    if (isStraightFlush(hand)) {
         return 'You have a Straight Flush!';
     }
 
-    if (isFourOfKind(hand, countInArray)) {
+    if (isFourOfKind(hand)) {
         return 'You have a Four of a Kind!';
     }
 
-    if (isFullHouse(hand, isThreeOfKind)) {
+    if (isFullHouse(hand)) {
         return 'You have a Fullhouse!';
     }
 
@@ -146,7 +140,7 @@ const isWinningHand = (hand) => {
         return 'You have a Straight!';
     }
 
-    if (isThreeOfKind(hand, countInArray)) {
+    if (isThreeOfKind(hand)) {
         return 'You have a Three of a Kind!';
     }
 
@@ -175,13 +169,5 @@ const straightFlushHand = [{ value: 1, suit: 'Clubs'}, { value: 2, suit: 'Clubs'
 const royalFlushHand = [{ value: 10, suit: 'Clubs'}, { value: 11, suit: 'Clubs' }, { value: 12, suit: 'Clubs' }, { value: 13, suit: 'Clubs' }, { value: 14, suit: 'Clubs' }]
 
 
-// console.log(isStraightFlush(straightFlushHand))
-// console.log(isTwoPair(twoPairHand))
-// console.log(isThreeOfKind(threeOfKindHand))
-// console.log(isFourOfKind(fourOfKindHand))
-// console.log(isFlush(threeOfKindHand))
-// console.log(isFlush(dealtHand))
-console.log(isFlush(flushHand))
-
-// console.log('hand', dealtHand)
-// console.log(isWinningHand(dealtHand))
+console.log('hand', dealtHand)
+console.log(isWinningHand(dealtHand))
