@@ -5,6 +5,7 @@
 
 // element selectors
 const hand_container = document.body.querySelector('.hand_container');
+const hand_containerNode = document.body.querySelectorAll('.hand_container')
 const dealBtn = document.body.querySelector('.deal');
 
 
@@ -181,23 +182,40 @@ const isWinningHand = (hand) => {
 
 // console.log(isWinningHand(dealtHand))
 
-const dealHandToBrowser = hand => {
-    hand.forEach(card => {
-        let dealtCard = document.createElement('div')
-        dealtCard.classList.add('hand_container--card')
-        dealtCard.style.backgroundImage = `url(${card.image_url})`
-        dealtCard.style.backgroundSize =  '100% 100%';
-        return hand_container.appendChild(dealtCard);
-    })
-}
-
-dealHandToBrowser(dealtHand);
-
 const clearHand = () => {
     while (hand_container.firstChild) {
         hand_container.removeChild(hand_container.firstChild)
     } 
 }
+
+const dealFaceDownCardToBrowser = hand => {
+    hand.forEach((card, index) => {
+        let dealtCard = document.createElement('div')
+        dealtCard.classList.add('hand_container--card')
+        dealtCard.style.backgroundImage = 'url("./assets/playing_cards/back.png")'
+        dealtCard.style.backgroundSize =  '100% 100%';
+        dealtCard.dataset.index = index;
+        return hand_container.appendChild(dealtCard);
+    })
+}
+
+const dealHandToBrowser = hand => {
+    clearHand();
+    hand.forEach((card, index) => {
+        let dealtCard = document.createElement('div')
+        dealtCard.classList.add('hand_container--card')
+        dealtCard.style.backgroundImage = `url(${card.image_url})`
+        dealtCard.style.backgroundSize =  '100% 100%';
+        dealtCard.dataset.index = index;
+        dealtCard.addEventListener('click', (e) => {
+            console.log(e.target)
+            e.target.classList.toggle('hand_container--card--active')
+        })
+        return hand_container.appendChild(dealtCard);
+    })
+}
+
+
 const dealNewHand = () => {
     clearHand();
     let newShuffledDeck = _.shuffle(deck);
@@ -206,5 +224,19 @@ const dealNewHand = () => {
 }
 
 
+dealFaceDownCardToBrowser(dealtHand)
+
 // Event Listeners
 dealBtn.addEventListener('click', dealNewHand)
+
+
+const testArray = [];
+
+// hand_container.addEventListener('click', (e) => {
+//     // const indCard = document.body.querySelectorAll('.hand_container--card');
+//     // const item = parseInt(e.target.dataset.index)
+//     // testArray.push(item)
+//     // console.log(hand_container.removeChild(hand_container.childNodes[item]));
+//     // console.log(indCard, item)
+//     e.target.classList.toggle('hand_container--card--active')
+// })

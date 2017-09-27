@@ -1,0 +1,50 @@
+body {
+    background: lightblue;
+}
+
+.header {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 30px;
+}
+
+.container {
+    margin: 0 auto;
+    background-color: green;
+    height: 500px;
+    width: 800px;
+    border: 2px solid red;
+}
+
+.hand_container {
+    margin-top: 200px;
+    height: 300px;
+    width: 800px;
+}
+
+.deal {
+    margin: 10px;
+}
+
+.hand_container--card {
+    margin-top: 25px;
+    margin-left: 5px;
+    height: 200px;
+    width: 150px;
+    border: 1px solid black;
+    float: left;
+    background-color: white;
+}
+
+.hand_container--card--active {
+    box-sizing: border-box;
+    border: 3px solid yellow;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.hand_container--card:hover {
+    box-sizing: border-box;
+    border: 3px solid yellow;
+    cursor: pointer;
+}
+
